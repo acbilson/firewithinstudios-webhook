@@ -15,7 +15,7 @@ BUILD_TAGS=0
 ####
 case $REPO in
 
-	firewithin)
+	firewithinstudios)
     PATH=/mnt/firewithin/content
     BUILD_TAGS=1
   ;;
