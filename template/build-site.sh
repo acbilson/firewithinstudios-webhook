@@ -16,7 +16,7 @@ BUILD_TAGS=0
 case $REPO in
 
 	firewithinstudios)
-    PATH=/mnt/firewithin/content
+    PATH=/mnt/firewithinstudios/content
     BUILD_TAGS=1
   ;;
 
@@ -31,16 +31,10 @@ esac
 ####
 case $REF in
 
-  refs/heads/master)
-    BRANCH=master
+  refs/heads/main)
+    BRANCH=main
     DIST_PATH=/var/www/site
-    CONFIG_PATH=/etc/webhook/config-prod.toml
-  ;;
-
-  refs/heads/release/*)
-    BRANCH="release/$(/usr/bin/basename $REF)"
-    DIST_PATH=/var/www/uat
-    CONFIG_PATH=/etc/webhook/config-uat.toml
+    CONFIG_PATH=/etc/webhook/firewithin-prod.toml
   ;;
 
   *)
@@ -51,106 +45,22 @@ esac
 
 echo "checking out $BRANCH for content"
 echo "################"
-cd /mnt/chaos/content
+cd /mnt/firewithinstudios
 /usr/bin/git fetch
 
-# Retrieves content based on which repo is requested
-#
-# This approach allows me to have a release candidate for one
-# repo and use master for the other, or the same release candidate
-# for both.
+# Retrieves content
 ####
-case $REPO in
+echo "\nfetching firewithin"
+echo "################"
+cd /mnt/firewithinstudios && /usr/bin/git fetch
 
-chaos-content)
+echo "\nchecking out firewithin on $BRANCH"
+echo "################"
+/usr/bin/git checkout $BRANCH
 
-  echo "\nfetching content"
-  echo "################"
-  cd /mnt/chaos/content && /usr/bin/git fetch
-
-  echo "\nchecking out content on $BRANCH"
-  echo "################"
-  /usr/bin/git checkout $BRANCH
-
-  echo "\npulling latest from $BRANCH"
-  echo "################"
-  /usr/bin/git pull
-
-  echo "\nfetching theme"
-  echo "################"
-  cd /mnt/chaos/themes/chaos && /usr/bin/git fetch
-
-  # if a release candidate does not exist for theme like it does for content, use master
-  BRANCH_EXISTS=$(/usr/bin/git ls-remote --heads origin $REF | /usr/bin/wc -l)
-
-  if [ $BRANCH_EXISTS == 0 ]; then
-
-    echo "\nchecking out theme master because $BRANCH does not exist"
-    echo "################"
-    /usr/bin/git checkout master
-
-    echo "\npulling latest from theme master"
-    echo "################"
-    /usr/bin/git pull
-
-  else
-
-    echo "\nchecking out theme on $BRANCH"
-    echo "################"
-    /usr/bin/git checkout $BRANCH
-
-    echo "\npulling latest from $BRANCH"
-    echo "################"
-    /usr/bin/git pull
-
-  fi
-;;
-
-chaos-theme)
-
-  echo "\nfetching theme"
-  echo "################"
-  cd /mnt/chaos/themes/chaos && /usr/bin/git fetch
-
-  echo "\nchecking out theme on $BRANCH"
-  echo "################"
-  /usr/bin/git checkout $BRANCH
-
-  echo "\npulling latest from $BRANCH"
-  echo "################"
-  /usr/bin/git pull
-
-  echo "\nfetching content"
-  echo "################"
-  cd /mnt/chaos/content && /usr/bin/git fetch
-
-  # if a release candidate does not exist for theme like it does for content, use master
-  BRANCH_EXISTS=$(/usr/bin/git ls-remote --heads origin $REF | /usr/bin/wc -l)
-
-  if [ $BRANCH_EXISTS == 0 ]; then
-
-    echo "\nchecking out content master because $BRANCH does not exist"
-    echo "################"
-    /usr/bin/git checkout master
-
-    echo "\npulling latest from content master"
-    echo "################"
-    /usr/bin/git pull
-
-  else
-
-    echo "\nchecking out content on $BRANCH"
-    echo "################"
-    /usr/bin/git checkout $BRANCH
-
-    echo "\npulling latest from $BRANCH"
-    echo "################"
-    /usr/bin/git pull
-
-  fi
-  ;;
-
-esac
+echo "\npulling latest from $BRANCH"
+echo "################"
+/usr/bin/git pull
 
 if [ -d /tmp/hugo_cache ]; then
   echo "\n\nclearing hugo cache from last build"
@@ -163,19 +73,6 @@ echo "################"
 /usr/bin/hugo \
   -d $DIST_PATH \
   --config $CONFIG_PATH \
-  --contentDir /mnt/chaos/content \
-  --themesDir /mnt/chaos/themes \
+  --contentDir /mnt/firewithinstudios/content \
+  --themesDir /mnt/firewithinstudios/themes \
   --cleanDestinationDir
-
-if [ $BUILD_TAGS == 1 ]; then
-  echo "\nremoving existing network tags"
-  echo "################"
-  /bin/rm -f $DIST_PATH/network/diagram.json
-
-  echo "\nbuilding network tags"
-  echo "################"
-  /usr/local/bin/tagparser \
-    --root /mnt/chaos/content \
-    --dirs "plants/business,plants/culture,plants/entrepreneurship,plants/faith,plants/identity,plants/leadership,plants/meta,plants/parenting,plants/science,plants/technology,plants/writing" \
-    --output $DIST_PATH/network/diagram.json
-fi
