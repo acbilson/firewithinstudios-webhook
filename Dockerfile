@@ -23,4 +23,4 @@ FROM        base as prod
 COPY        template/build-site.sh /usr/local/bin/
 RUN         chmod +x /usr/local/bin/build-site.sh
 
-ENTRYPOINT  ["/usr/local/bin/webhook", "-verbose", "-hooks", "/etc/webhook/firewithinstudios.json"]
+ENTRYPOINT  ["/usr/local/bin/webhook", "-verbose", "-hooks", "/etc/webhook/firewithin.json"]

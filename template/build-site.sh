@@ -15,8 +15,8 @@ BUILD_TAGS=0
 ####
 case $REPO in
 
-	firewithinstudios)
-    PATH=/mnt/firewithinstudios/content
+	firewithin)
+    PATH=/mnt/firewithin/content
     BUILD_TAGS=1
   ;;
 
@@ -45,14 +45,14 @@ esac
 
 echo "checking out $BRANCH for content"
 echo "################"
-cd /mnt/firewithinstudios
+cd /mnt/firewithin
 /usr/bin/git fetch
 
 # Retrieves content
 ####
 echo "\nfetching firewithin"
 echo "################"
-cd /mnt/firewithinstudios && /usr/bin/git fetch
+cd /mnt/firewithin && /usr/bin/git fetch
 
 echo "\nchecking out firewithin on $BRANCH"
 echo "################"
@@ -73,6 +73,6 @@ echo "################"
 /usr/bin/hugo \
   -d $DIST_PATH \
   --config $CONFIG_PATH \
-  --contentDir /mnt/firewithinstudios/content \
-  --themesDir /mnt/firewithinstudios/themes \
+  --contentDir /mnt/firewithin/content \
+  --themesDir /mnt/firewithin/themes \
   --cleanDestinationDir
