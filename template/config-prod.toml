@@ -1,0 +1,21 @@
+baseURL = "http://firewithinfilms.studio"
+languageCode = "en-us"
+title = "Fire Within Films"
+author = "Alex Bilson"
+theme = "firewithin"
+sectionPagesMenu = "main"
+defaultColorMode = "light"
+
+[markup]
+  [markup.highlight]
+    anchorLineNos = false
+    codeFences = true
+    guessSyntax = false
+    hl_Lines = ""
+    lineAnchors = ""
+    lineNoStart = 1
+    lineNos = false
+    lineNumbersInTable = true
+    noClasses = true
+    style = "monokai"
+    tabWidth = 4

@@ -1,0 +1,31 @@
+########
+# Global
+########
+set -a # exports vars - docker needs no export, but bash scripts do
+
+# remote hosts
+# I use an ssh config file to specify the user/ip combination
+# for ssh interaction. These are hosts specified in ~/.ssh/config
+PROD_HOST=web
+UAT_HOST=web
+
+######################
+# Environment-Specific
+######################
+
+# The port exposed by the service.
+UAT_EXPOSED_PORT=9301
+EXPOSED_PORT=9300
+
+# The public-facing url. May be routed behind a proxy.
+UAT_SITE=https://uat.mysite.com
+PRD_SITE=https://mysite.com
+
+# webhook secrets
+UAT_WEBHOOK_SECRET=myuatwebhooksecret
+PRD_WEBHOOK_SECRET=myuatwebhooksecret
+
+# paths
+CONTENT_PATH=/my/uat/hugo/content/path
+THEME_PATH=/my/uat/hugo/theme/path
+SITE_PATH=/my/uat/site/path
