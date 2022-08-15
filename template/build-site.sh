@@ -76,4 +76,3 @@ echo "################"
   --contentDir /mnt/firewithin/content \
   --themesDir /mnt/firewithin/themes \
   --cleanDestinationDir
-
